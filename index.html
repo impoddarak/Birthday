@@ -220,7 +220,7 @@
   </style>
 </head>
 <body>
-
+<canvas class="confetti" id="confetti"></canvas>
 <div class="container" id="step-heart">
   <div class="title">💖 Birthday Surprise 💖</div>
   <div class="subnote">Hey beautiful, click the pink heart to start your surprise! 🥰</div>
@@ -502,6 +502,55 @@ function showHearts() {
   }
   setTimeout(()=>hearts.classList.add('hide'), 3100);
 }
+</script>
+  <script>
+const confetti = document.getElementById('confetti'); 
+confetti.width = window.innerWidth; 
+confetti.height = window.innerHeight;
+window.addEventListener('resize',()=>{confetti.width=window.innerWidth;confetti.height=window.innerHeight;});
+const ctx = confetti.getContext('2d');
+const colors=['#ffb6d5','#ffd6e0','#fffde4','#ffe18d','#bde9ec','#e0c3fc','#f8bbd0','#fe94b7'];
+function ConfettiPiece(){
+  this.x=Math.random()*confetti.width;
+  this.y=Math.random()*confetti.height-50;
+  this.r=6+Math.random()*8; 
+  this.d=Math.random()*90+50;
+  this.color=colors[Math.floor(Math.random()*colors.length)];
+  this.tilt=Math.floor(Math.random()*7)-3;
+  this.tiltAngleIncremental=(Math.random()*0.07)+.01;
+  this.tiltAngle=0;
+  this.alpha=0.6+Math.random()*0.23;
+}
+let pieces=[];
+for(let i=0;i<32;i++)pieces.push(new ConfettiPiece());
+function drawConfetti(){
+  ctx.clearRect(0, 0, confetti.width, confetti.height);
+  for(let i=0;i<pieces.length;i++){
+    let p=pieces[i];
+    ctx.beginPath();
+    ctx.lineWidth=p.r/2;
+    ctx.strokeStyle=p.color;
+    ctx.globalAlpha=p.alpha;
+    ctx.moveTo(p.x+p.tilt+p.r/3,p.y);
+    ctx.lineTo(p.x+p.tilt,p.y+p.tilt+p.r);
+    ctx.stroke();
+  }
+  moveConfetti();
+  requestAnimationFrame(drawConfetti);
+}
+function moveConfetti(){
+  for(let i=0;i<pieces.length;i++){
+    let p=pieces[i];
+    p.y+=(Math.cos(.12+p.d)+2+p.r/1.5)/1.5;
+    p.tiltAngle+=p.tiltAngleIncremental;
+    p.tilt=Math.sin(p.tiltAngle)*10;
+    if(p.y>confetti.height){
+      p.x=Math.random()*confetti.width;
+      p.y=-15;
+    }
+  }
+}
+drawConfetti();
 </script>
 </body>
 </html>
