@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <title>Happy Birthday 🎂💖</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Quicksand:wght@400;700&display=swap" rel="stylesheet">
   <style>
     body {
@@ -20,6 +19,12 @@
       0% { background-position: 0% 50%; }
       50% { background-position: 100% 50%; }
       100% { background-position: 0% 50%; }
+    }
+    .confetti {
+      position: fixed;
+      left: 0; top: 0; width: 100vw; height: 100vh;
+      z-index:0;
+      pointer-events: none;
     }
     .container {
       position: relative;
@@ -220,7 +225,9 @@
   </style>
 </head>
 <body>
+
 <canvas class="confetti" id="confetti"></canvas>
+
 <div class="container" id="step-heart">
   <div class="title">💖 Birthday Surprise 💖</div>
   <div class="subnote">Hey beautiful, click the pink heart to start your surprise! 🥰</div>
@@ -300,48 +307,55 @@
 <!-- Floating Hearts -->
 <div class="hearts hide" id="hearts"></div>
 
-<!-- 🌸 Falling Flowers Effect -->
+<!-- Confetti animation script -->
 <script>
-const flowers = [];
-const flowerColors = ['#ffaad2', '#fff5f5', '#f8bbd0', '#f9c6de', '#fff0ff', '#ffdeea'];
-const flowerSVG = encodeURIComponent(`
-  <svg width="20" height="20" viewBox="0 0 20 20" fill="pink" xmlns="http://www.w3.org/2000/svg">
-    <ellipse cx="10" cy="4" rx="2.5" ry="5" fill="COLOR_TOKEN"/>
-    <ellipse cx="16" cy="10" rx="2.5" ry="5" fill="COLOR_TOKEN" transform="rotate(60 16 10)"/>
-    <ellipse cx="10" cy="16" rx="2.5" ry="5" fill="COLOR_TOKEN" transform="rotate(120 10 16)"/>
-    <ellipse cx="4" cy="10" rx="2.5" ry="5" fill="COLOR_TOKEN" transform="rotate(-60 4 10)"/>
-  </svg>
-`);
-function createFlower() {
-  const flower = document.createElement('img');
-  const color = flowerColors[Math.floor(Math.random() * flowerColors.length)];
-  flower.src = `data:image/svg+xml;utf8,${flowerSVG.replace(/COLOR_TOKEN/g, color)}`;
-  flower.style.position = 'fixed';
-  flower.style.left = Math.random() * 100 + 'vw';
-  flower.style.top = '-30px';
-  flower.style.zIndex = 2;
-  flower.style.opacity = 0.8 + Math.random() * 0.2;
-  flower.style.width = flower.style.height = (18 + Math.random() * 18) + 'px';
-  flower.style.pointerEvents = 'none';
-  document.body.appendChild(flower);
-  flowers.push({el: flower, x: parseFloat(flower.style.left), y: -30, speed: 1.6 + Math.random() * 2.2, sway:0 });
+const confetti = document.getElementById('confetti'); 
+confetti.width = window.innerWidth; 
+confetti.height = window.innerHeight;
+window.addEventListener('resize',()=>{confetti.width=window.innerWidth;confetti.height=window.innerHeight;});
+const ctx = confetti.getContext('2d');
+const colors=['#ffb6d5','#ffd6e0','#fffde4','#ffe18d','#bde9ec','#e0c3fc','#f8bbd0','#fe94b7'];
+function ConfettiPiece(){
+  this.x=Math.random()*confetti.width;
+  this.y=Math.random()*confetti.height-50;
+  this.r=6+Math.random()*8; 
+  this.d=Math.random()*90+50;
+  this.color=colors[Math.floor(Math.random()*colors.length)];
+  this.tilt=Math.floor(Math.random()*7)-3;
+  this.tiltAngleIncremental=(Math.random()*0.07)+.01;
+  this.tiltAngle=0;
+  this.alpha=0.6+Math.random()*0.23;
 }
-function animateFlowers() {
-  for(let i=0;i<flowers.length;++i){
-    let f = flowers[i];
-    f.y += f.speed;
-    f.sway += 0.02 + Math.random() * 0.025;
-    f.el.style.top = f.y + 'px';
-    f.el.style.left = (f.x + Math.sin(f.sway * 6) * 16) + 'vw';
-    if(f.y > window.innerHeight + 30 || f.x < -10 || f.x > 110) {
-      f.el.remove();
-      flowers.splice(i,1); i--;
+let pieces=[];
+for(let i=0;i<32;i++)pieces.push(new ConfettiPiece());
+function drawConfetti(){
+  ctx.clearRect(0, 0, confetti.width, confetti.height);
+  for(let i=0;i<pieces.length;i++){
+    let p=pieces[i];
+    ctx.beginPath();
+    ctx.lineWidth=p.r/2;
+    ctx.strokeStyle=p.color;
+    ctx.globalAlpha=p.alpha;
+    ctx.moveTo(p.x+p.tilt+p.r/3,p.y);
+    ctx.lineTo(p.x+p.tilt,p.y+p.tilt+p.r);
+    ctx.stroke();
+  }
+  moveConfetti();
+  requestAnimationFrame(drawConfetti);
+}
+function moveConfetti(){
+  for(let i=0;i<pieces.length;i++){
+    let p=pieces[i];
+    p.y+=(Math.cos(.12+p.d)+2+p.r/1.5)/1.5;
+    p.tiltAngle+=p.tiltAngleIncremental;
+    p.tilt=Math.sin(p.tiltAngle)*10;
+    if(p.y>confetti.height){
+      p.x=Math.random()*confetti.width;
+      p.y=-15;
     }
   }
-  requestAnimationFrame(animateFlowers);
 }
-setInterval(createFlower, 430);
-requestAnimationFrame(animateFlowers);
+drawConfetti();
 </script>
 
 <script>
@@ -502,55 +516,6 @@ function showHearts() {
   }
   setTimeout(()=>hearts.classList.add('hide'), 3100);
 }
-</script>
-  <script>
-const confetti = document.getElementById('confetti'); 
-confetti.width = window.innerWidth; 
-confetti.height = window.innerHeight;
-window.addEventListener('resize',()=>{confetti.width=window.innerWidth;confetti.height=window.innerHeight;});
-const ctx = confetti.getContext('2d');
-const colors=['#ffb6d5','#ffd6e0','#fffde4','#ffe18d','#bde9ec','#e0c3fc','#f8bbd0','#fe94b7'];
-function ConfettiPiece(){
-  this.x=Math.random()*confetti.width;
-  this.y=Math.random()*confetti.height-50;
-  this.r=6+Math.random()*8; 
-  this.d=Math.random()*90+50;
-  this.color=colors[Math.floor(Math.random()*colors.length)];
-  this.tilt=Math.floor(Math.random()*7)-3;
-  this.tiltAngleIncremental=(Math.random()*0.07)+.01;
-  this.tiltAngle=0;
-  this.alpha=0.6+Math.random()*0.23;
-}
-let pieces=[];
-for(let i=0;i<32;i++)pieces.push(new ConfettiPiece());
-function drawConfetti(){
-  ctx.clearRect(0, 0, confetti.width, confetti.height);
-  for(let i=0;i<pieces.length;i++){
-    let p=pieces[i];
-    ctx.beginPath();
-    ctx.lineWidth=p.r/2;
-    ctx.strokeStyle=p.color;
-    ctx.globalAlpha=p.alpha;
-    ctx.moveTo(p.x+p.tilt+p.r/3,p.y);
-    ctx.lineTo(p.x+p.tilt,p.y+p.tilt+p.r);
-    ctx.stroke();
-  }
-  moveConfetti();
-  requestAnimationFrame(drawConfetti);
-}
-function moveConfetti(){
-  for(let i=0;i<pieces.length;i++){
-    let p=pieces[i];
-    p.y+=(Math.cos(.12+p.d)+2+p.r/1.5)/1.5;
-    p.tiltAngle+=p.tiltAngleIncremental;
-    p.tilt=Math.sin(p.tiltAngle)*10;
-    if(p.y>confetti.height){
-      p.x=Math.random()*confetti.width;
-      p.y=-15;
-    }
-  }
-}
-drawConfetti();
 </script>
 </body>
 </html>
