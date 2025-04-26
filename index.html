@@ -40,7 +40,6 @@
       letter-spacing: 2px;
       text-shadow: 0 3px 16px #fff;
     }
-    /* Cuter Heart Button */
     .heart-btn {
       width: 140px; height: 127px;
       position: relative;
@@ -96,7 +95,6 @@
       font-style:italic;
     }
     .hide { display: none !important; }
-    /* Tree + Balloon */
     .treeanime {
       display: flex;
       flex-direction: column;
@@ -118,7 +116,6 @@
     @keyframes balloonfloat {
       to { transform: translateY(-30px);}
     }
-    /* Music Controls */
     .music-control {
       position: fixed;
       right: 24px; bottom: 18px;
@@ -157,48 +154,6 @@
       78% { transform: scale(1.09); opacity: 1;}
       100% { transform: scale(1); }
     }
-    .qna {
-      font-size: 1.18em;
-      margin: 18px 0;
-      background: #fff2f9cc;
-      border-radius: 17px;
-      display: inline-block;
-      padding: 33px 40px;
-      box-shadow: 0 3px 14px #fd9cce37;
-      color: #ba1862;
-      animation: fadein 0.8s;
-      min-width: 220px;
-      max-width: 93vw;
-    }
-    .qna input {
-      padding: 7px 13px;
-      border: 1.7px solid #e88;
-      border-radius: 7px;
-      outline: none;
-      font-size: 1.17em;
-      background: #ffe0ed;
-      margin-top: 13px;
-      color: #c2185b;
-      margin-right: 7px;
-    }
-    .qna button {
-      padding: 6px 18px;
-      background: #ffb6d5;
-      border: none;
-      border-radius: 8px;
-      font-size: 1em;
-      color: #c2185b;
-      font-weight: bold;
-      cursor: pointer;
-      transition: background .17s, transform .12s;
-      margin-top: 13px;
-      box-shadow: 0 1px 4px #fb9fc965;
-    }
-    .qna button:hover {
-      background: #f36ba6;
-      color:#fff;
-      transform: scale(1.11);
-    }
     .hearts {
       pointer-events: none;
       position: fixed;
@@ -219,34 +174,52 @@
       13% { opacity: 1;}
       100% { opacity: 0; transform: scale(1.25) translateY(-205px);}
     }
-    ul.qna-summary {
-      font-size: 0.78em;
-      color:#b7006d;
-      margin-top:1.3em;
-      text-align:left;
-      max-width:370px;
-      margin-left:auto;
-      margin-right:auto;
-      padding-left: 0;
+    /* MCQ quiz styles */
+    .mcq-btn {
+      padding: 13px 26px;
+      border-radius: 8px;
+      border: none;
+      background: #ffeefa;
+      color: #ba1862;
+      font-size: 1.05em;
+      font-family: 'Quicksand',sans-serif;
+      box-shadow: 0 2px 12px #ffb6d560;
+      margin-bottom: 8px;
+      cursor: pointer;
+      transition: background .2s,color .2s,transform .12s;
     }
-    ul.qna-summary li {
-      margin-bottom:9px;
-      list-style: none;
-      border-left: 4px solid #ecb8ea;
-      padding-left: 7px;
+    .mcq-btn:hover:not([disabled]) {
+      background: #ffe2ef;
+      color: #e91e63;
+      transform: scale(1.07);
     }
+    .mcq-anim { margin-top:12px; font-weight: bold; }
+    @keyframes shake {
+      0%{transform:translateX(0);}
+      25%{transform:translateX(-11px);}
+      50%{transform:translateX(11px);}
+      75%{transform:translateX(-9px);}
+      90%{transform:translateX(5px);}
+      100%{transform:translateX(0);}
+    }
+    @keyframes popup {
+      0%{transform:scale(0.7);}
+      78%{transform:scale(1.12);}
+      100%{transform:scale(1);}
+    }
+    .mcq-correct { }
+    .mcq-wrong { animation: shake .5s; }
     @media (max-width:600px) {
       .treeanime { transform: scale(0.83);}
       .heart-btn { width: 99px;height: 92px;}
       .heart-btn span { font-size: 1em;}
       .title { font-size:1.44em; margin-top:0; }
-      .qna { font-size:1.04em;padding:20px 6vw;}
       .bdaywish {font-size:1em;}
+      .mcq-btn {padding:9px 10vw;}
     }
   </style>
 </head>
 <body>
-<!-- Remove Confetti Canvas, add flowers effect instead -->
 
 <div class="container" id="step-heart">
   <div class="title">💖 Birthday Surprise 💖</div>
@@ -314,15 +287,14 @@
   <svg id="music-icon-play" style="display:block;" viewBox="0 0 36 36"><circle cx="18" cy="18" r="16" fill="#ffb6d5"/><polygon points="14,10 28,18 14,26" fill="#e91e63"/></svg>
   <svg id="music-icon-pause" style="display:none;" viewBox="0 0 36 36"><circle cx="18" cy="18" r="16" fill="#ffb6d5"/><rect x="12" y="10" width="4" height="16" fill="#e91e63"/><rect x="20" y="10" width="4" height="16" fill="#e91e63"/></svg>
 </div>
-<!-- QnA Step -->
+<!-- QnA Step (MCQ Quiz) -->
 <div class="container hide" id="step-qna"></div>
 <!-- Birthday Wish -->
 <div class="container hide" id="step-wish">
   <div class="bdaywish" id="bdaywish">
     🎉 Happy Birthday, <span id="gf-name">lovely girl!</span><br>
     You light up my world in the sweetest ways. I'm lucky to have you.<br>
-    I hope this day is as amazing as **you** are! 💋<br>
-    <span style="font-size:.55em;font-family:'Quicksand',sans-serif;color:#ad1457;margin-top:14px;display:inline-block;">(see your answers below!)</span>
+    I hope this day is as amazing as <b>you</b> are! 💋
   </div>
 </div>
 <!-- Floating Hearts -->
@@ -373,123 +345,163 @@ requestAnimationFrame(animateFlowers);
 </script>
 
 <script>
-// All your previous logic for QnA, music, hearts...
-// (copy exactly your latest code, except remove any confetti code)
-  const QUESTIONS = [
-    {q: "If you close your eyes and picture happiness, what do you see? 💭", a: ""},
-    {q: "What's your favorite memory of us (so far)? 🥰", a: ""},
-    {q: "Describe me in one cute word! 😇", a: ""},
-    {q: "On a scale of 1-10... How awesome is your birthday today? 🎂", a: ""}
-  ];
-  const stepHeart = document.getElementById('step-heart');
-  const stepTree = document.getElementById('step-tree');
-  const stepQna = document.getElementById('step-qna');
-  const stepWish = document.getElementById('step-wish');
-  const bdaywish = document.getElementById('bdaywish');
-  const hearts = document.getElementById('hearts');
-  const bgmusic = document.getElementById('bgmusic');
-  const mctrl = document.getElementById('music-ctrl');
-  const mIcPlay = document.getElementById('music-icon-play');
-  const mIcPause = document.getElementById('music-icon-pause');
-  let musicPlaying = false;
-  document.getElementById('heart-btn').onclick = function() {
-    stepHeart.classList.add('hide');
-    stepTree.classList.remove('hide');
+/* -- MCQ QUIZ LOGIC -- */
+const MCQ_QUESTIONS = [
+  {
+    q: "What is my favorite way to wish you happy birthday? 🎂",
+    options: ["With a silly meme", "With a web surprise!", "By singing loudly"],
+    correct: 1 // correct answer is "With a web surprise!"
+  },
+  {
+    q: "How much do I love you? 💖",
+    options: ["To the moon and back", "Only a little 😜", "More than all the stars"],
+    correct: 2
+  },
+  {
+    q: "What makes you extra special? ✨",
+    options: ["Your smile", "Your kindness", "All of the above!"],
+    correct: 2
+  }
+];
+
+const stepHeart = document.getElementById('step-heart');
+const stepTree = document.getElementById('step-tree');
+const stepQna = document.getElementById('step-qna');
+const stepWish = document.getElementById('step-wish');
+const bdaywish = document.getElementById('bdaywish');
+const hearts = document.getElementById('hearts');
+const bgmusic = document.getElementById('bgmusic');
+const mctrl = document.getElementById('music-ctrl');
+const mIcPlay = document.getElementById('music-icon-play');
+const mIcPause = document.getElementById('music-icon-pause');
+let musicPlaying = false;
+
+// Heart button triggers animation and tree
+document.getElementById('heart-btn').onclick = function() {
+  stepHeart.classList.add('hide');
+  stepTree.classList.remove('hide');
+  setTimeout(() => {
+    bgmusic.volume = .28;
+    bgmusic.play();
+    musicPlaying = true;
+    mctrl.style.display='flex';
+    mIcPlay.style.display='none';
+    mIcPause.style.display='block';
+  }, 700);
+  setTimeout(() => {
+    stepTree.classList.add('hide');
+    showNote("Before your wish... a few fun questions! 💬");
+    setTimeout(startQna, 1700);
+  }, 3200);
+};
+
+// Music Controls
+mctrl.onclick = function() {
+  if(musicPlaying){
+    bgmusic.pause();
+    mIcPlay.style.display='block';mIcPause.style.display='none';
+    musicPlaying=false;
+  } else {
+    bgmusic.play();
+    mIcPlay.style.display='none';mIcPause.style.display='block';
+    musicPlaying=true;
+  }
+}
+
+// Notes popup
+function showNote(msg) {
+  let n = document.createElement('div');
+  n.textContent = msg;
+  n.className = "bnote";
+  document.body.appendChild(n);
+  setTimeout(()=>n.remove(), 1600);
+}
+
+// -- MCQ Logic --
+let mcqIndex = 0;
+function startQna() {
+  stepQna.classList.remove('hide');
+  showMCQ(0);
+}
+
+function showMCQ(idx) {
+  if (idx >= MCQ_QUESTIONS.length) {
+    stepQna.innerHTML =
+      `<div class="qna">
+        <div style="font-size:1.6em;color:#c2185b;">Yay! Quiz finished! 🎉</div>
+        <div style="margin-top:11px;">You made my day special too! 💕</div>
+      </div>`;
     setTimeout(() => {
-      bgmusic.volume = .28;
-      bgmusic.play();
-      musicPlaying = true;
-      mctrl.style.display='flex';
-      mIcPlay.style.display='none';
-      mIcPause.style.display='block';
-    }, 700);
-    setTimeout(() => {
-      stepTree.classList.add('hide');
-      showNote("Before your wish... a few fun questions! 💬");
-      setTimeout(startQna, 1700);
-    }, 3200);
-  };
-  mctrl.onclick = function() {
-    if(musicPlaying){
-      bgmusic.pause();
-      mIcPlay.style.display='block';mIcPause.style.display='none';
-      musicPlaying=false;
-    } else {
-      bgmusic.play();
-      mIcPlay.style.display='none';mIcPause.style.display='block';
-      musicPlaying=true;
-    }
-  }
-  function showNote(msg) {
-    let n = document.createElement('div');
-    n.textContent = msg;
-    n.className = "bnote";
-    document.body.appendChild(n);
-    setTimeout(()=>n.remove(), 1600);
-  }
-  let qIndex = 0;
-  function startQna() {
-    stepQna.classList.remove('hide');
-    showQA(qIndex);
-  }
-  function showQA(idx) {
-    if (idx >= QUESTIONS.length) {
       stepQna.classList.add('hide');
-      showWish();
-      return;
-    }
-    stepQna.innerHTML = `
-      <div class="qna" style="animation-delay:0.15s;">
-        <div style="margin-bottom:14px;font-family:'Pacifico',cursive;font-size:1.1em;">${QUESTIONS[idx].q}</div>
-        <input type="text" id="ans${idx}" placeholder="Type here..." autofocus maxlength="62">
-        <button onclick="submitQ(${idx})">Next</button>
+      stepWish.classList.remove('hide');
+      showHearts();
+    }, 1300);
+    return;
+  }
+  const q = MCQ_QUESTIONS[idx];
+  stepQna.innerHTML = `
+    <div class="qna" id="mcqblock">
+      <div style="margin-bottom:16px;font-family:'Pacifico',cursive;font-size:1.17em;">${q.q}</div>
+      <div>${q.options.map((opt, i) =>
+        `<button class="mcq-btn" onclick="selectMCQ(${idx},${i},this)">${opt}</button>`
+      ).join("<br><br>")}
       </div>
+    </div>
+  `;
+}
+
+window.selectMCQ = (idx, selected, btn) => {
+  const block = document.getElementById('mcqblock');
+  const q = MCQ_QUESTIONS[idx];
+  const buttons = block.querySelectorAll('.mcq-btn');
+  buttons.forEach(b => b.disabled = true);
+
+  if (selected === q.correct) {
+    block.classList.add("mcq-correct");
+    btn.style.background = "#A8E6CF";
+    btn.style.color = "#299F59";
+    block.innerHTML += `
+      <div class="mcq-anim" style="font-size:2.1em;animation:popup 0.8s;">🌟 Correct! 🌟</div>
     `;
-    setTimeout(()=>{ document.getElementById('ans'+idx).focus(); },90);
+    setTimeout(() => {
+      block.classList.remove("mcq-correct");
+      mcqIndex++;
+      showMCQ(mcqIndex);
+    }, 1000);
+  } else {
+    block.classList.add("mcq-wrong");
+    btn.style.background = "#FFD6D6";
+    btn.style.color = "#d81b60";
+    block.innerHTML += `
+      <div class="mcq-anim" style="font-size:1.7em;color:#d81b60;animation:shake 0.5s;">😢 Oops, not quite!</div>
+    `;
+    setTimeout(() => {
+      block.classList.remove("mcq-wrong");
+      buttons.forEach(b => b.disabled = false); // Allow retry
+      block.querySelector('.mcq-anim').remove();
+      btn.style.background = "";
+      btn.style.color = "";
+    }, 900);
   }
-  stepQna.addEventListener('keydown', function(e){
-    if(e.key==='Enter'){
-      let input = stepQna.querySelector('input');
-      if(input){ input.nextElementSibling.click(); }
-    }
-  });
-  window.submitQ = (idx) => {
-    let input = document.getElementById('ans'+idx);
-    if(input.value.trim()) {
-      QUESTIONS[idx].a = input.value.trim();
-      qIndex++;
-      showQA(qIndex);
-    } else {
-      input.style.border = "2.3px solid #d81b60";
-      input.focus();
-    }
-  };
-  function showWish() {
-    stepWish.classList.remove('hide');
-    showHearts();
-    let qnaSummary = QUESTIONS.map(
-      q=> `<li><b>${q.q}</b><br><i>${q.a}</i></li>`
-      ).join("");
-    bdaywish.innerHTML +=
-      `<ul class="qna-summary">${qnaSummary}</ul>`;
-    showNote("You made it! Now make a wish! 🎂");
+};
+
+// Hearts animation (end)
+function showHearts() {
+  hearts.innerHTML = "";
+  hearts.classList.remove('hide');
+  for(let i=0;i<20;i++){
+    let h = document.createElement('span');
+    h.style.left = (Math.random()*97)+'vw';
+    let size = 19+Math.random()*27;
+    h.style.width = h.style.height = size+'px';
+    h.style.bottom = "-27px";
+    h.style.opacity = .7+Math.random()*.3;
+    h.style.animationDuration = (2 + Math.random()*1.6)+"s";
+    h.style.animationDelay = (Math.random()*0.7)+"s";
+    hearts.appendChild(h);
   }
-  function showHearts() {
-    hearts.innerHTML = "";
-    hearts.classList.remove('hide');
-    for(let i=0;i<20;i++){
-      let h = document.createElement('span');
-      h.style.left = (Math.random()*97)+'vw';
-      let size = 19+Math.random()*27;
-      h.style.width = h.style.height = size+'px';
-      h.style.bottom = "-27px";
-      h.style.opacity = .7+Math.random()*.3;
-      h.style.animationDuration = (2 + Math.random()*1.6)+"s";
-      h.style.animationDelay = (Math.random()*0.7)+"s";
-      hearts.appendChild(h);
-    }
-    setTimeout(()=>hearts.classList.add('hide'), 3100);
-  }
+  setTimeout(()=>hearts.classList.add('hide'), 3100);
+}
 </script>
 </body>
 </html>
