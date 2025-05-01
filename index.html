@@ -152,7 +152,10 @@
       font-family: 'Pacifico', cursive;
       font-weight: bold;
       text-shadow: 0 3px 22px #fff9;
-      max-width: 600px;
+      max-width: 98vw;
+      word-break: break-word;
+      padding: 0 8vw;
+      line-height: 1.5;
     }
     @keyframes wishPop {
       0% { transform: scale(0.86); opacity: 0;}
@@ -213,31 +216,36 @@
     }
     .mcq-correct { }
     .mcq-wrong { animation: shake .5s; }
-    @media (max-width:600px) {
-      .treeanime { transform: scale(0.83);}
-      .heart-btn { width: 99px;height: 92px;}
-      .heart-btn span { font-size: 1em;}
-      .title { font-size:1.44em; margin-top:0; }
-      .bdaywish {font-size:1em;}
-      .mcq-btn {padding:9px 10vw;}
-    }
+
+    /* Typewriter Animations and Mobile Adjustments */
     @keyframes popLetter {
-  0%   { opacity: 0; transform: scale(1.8); filter: blur(6px);}
-  65%  {opacity:1; transform: scale(.93);}
-  85%  {transform: scale(1.1);}
-  100% {opacity:1; transform:scale(1);}
-}
-@keyframes blink {
-  0%,50% { opacity: 1;}
-  100% {opacity: 0;}
-}
-.type-letter {
-  display:inline-block;
-  color:#d81b60;
-  animation: popLetter 0.27s cubic-bezier(.4,2,.4,1.1);
-  text-shadow:0 2px 12px #fff3, 0 0px 6px #ffb6d560;
-  font-size:inherit;
-}
+      0%   { opacity: 0; transform: scale(1.6);}
+      100% { opacity:1; transform:scale(1);}
+    }
+    @keyframes blink {
+      0%,50% { opacity: 1;}
+      100% {opacity: 0;}
+    }
+    .type-letter {
+      display:inline-block;
+      color:#d81b60;
+      animation: popLetter 0.34s cubic-bezier(.4,2,.4,1.1);
+      text-shadow:0 2px 12px #ffe, 0 0px 6px #ffb6d5;
+      font-size:inherit;
+      line-height:1.5;
+      word-break:break-word;
+    }
+    @media (max-width:600px) {
+      .bdaywish {
+        font-size: 1.25em;
+        padding: 0 3vw;
+        min-height: 120px;
+        line-height: 1.26;
+      }
+      .type-letter {
+        font-size: 1em;
+      }
+    }
   </style>
 </head>
 <body>
@@ -297,7 +305,6 @@
   <svg id="music-icon-pause" style="display:none;" viewBox="0 0 36 36"><circle cx="18" cy="18" r="16" fill="#ffb6d5"/><rect x="12" y="10" width="4" height="16" fill="#e91e63"/><rect x="20" y="10" width="4" height="16" fill="#e91e63"/></svg>
 </div>
 <div class="container hide" id="step-qna"></div>
-<!-- Birthday Wish -->
 <div class="container hide" id="step-wish">
   <div class="bdaywish" id="bdaywish">
     <span id="typewriter"></span>
@@ -434,7 +441,7 @@ function showMCQ(idx) {
       stepQna.classList.add('hide');
       stepWish.classList.remove('hide');
       showHearts();
-      showWish(); // <--- trigger the typewriter wish!
+      showWish();
     }, 1300);
     return;
   }
@@ -475,7 +482,7 @@ window.selectMCQ = (idx, selected, btn) => {
     `;
     setTimeout(() => {
       block.classList.remove("mcq-wrong");
-      buttons.forEach(b => b.disabled = false); 
+      buttons.forEach(b => b.disabled = false);
       block.querySelector('.mcq-anim').remove();
       btn.style.background = "";
       btn.style.color = "";
@@ -499,33 +506,27 @@ function showHearts() {
   setTimeout(()=>hearts.classList.add('hide'), 3100);
 }
 
-// --- TYPEWRITER WISH FUNCTION ---
+// --- IMPROVED TYPEWRITER, TYPING BY WORD ---
 function showWish() {
   const msg = "🎉 Happy birthday, my love, Medzzz. May your day be magical! 💖";
   const el = document.getElementById('typewriter');
   const cursor = document.getElementById('typewriter-cursor');
   el.innerHTML = "";
   cursor.style.display = "inline-block";
+  let words = msg.split(/(\s+)/); // Split words and spaces
   let i = 0;
-
   function typeNext() {
-    if (i < msg.length) {
-      // Pause longer after certain punctuation for "drama"
-      let currentChar = msg[i];
+    if (i < words.length) {
       let span = document.createElement("span");
       span.className = "type-letter";
-      span.textContent = currentChar;
+      span.textContent = words[i];
       el.appendChild(span);
-
-      let delay = 100;
-      if (",.?!".includes(currentChar)) delay = 250;
-      if (msg.substr(i,7) === "Medzzz.") delay = 650;
-
+      let delay = (words[i].trim().length > 1) ? 160 : 60;
+      if (words[i].includes(",") || words[i].includes(".")) delay += 210;
       i++;
       setTimeout(typeNext, delay);
     } else {
       cursor.style.display = "none";
-      // Nice sparkle after finished
       let sparkle = document.createElement("span");
       sparkle.textContent = " ✨";
       sparkle.style.color = "#f06292";
@@ -536,15 +537,6 @@ function showWish() {
   }
   typeNext();
 }
-// Sparkle pop CSS
-const css = document.createElement("style");
-css.innerHTML = `
-@keyframes pop {
-  0% { transform:scale(0.3) rotate(-10deg);}
-  70%{ transform: scale(1.3);}
-  100% { transform: scale(1) rotate(0deg);}
-}`;
-document.head.appendChild(css);
 </script>
 </body>
 </html>
