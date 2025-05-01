@@ -179,7 +179,6 @@
       13% { opacity: 1;}
       100% { opacity: 0; transform: scale(1.25) translateY(-205px);}
     }
-    /* MCQ quiz styles */
     .mcq-btn {
       padding: 13px 26px;
       border-radius: 8px;
@@ -225,14 +224,11 @@
   </style>
 </head>
 <body>
-
 <canvas class="confetti" id="confetti"></canvas>
-
 <div class="container" id="step-heart">
   <div class="title">💖 Birthday Surprise 💖</div>
   <div class="subnote">Hey beautiful, click the pink heart to start your surprise! 🥰</div>
   <div class="heart-btn" id="heart-btn">
-    <!-- Pretty SVG Heart -->
     <svg viewBox="0 0 100 90">
       <path
         d="M50 80
@@ -245,34 +241,26 @@
         fill="#ffb6d5" stroke="#ee83b5" stroke-width="2"/>
     </svg>
     <span>Click Me! 💗</span>
-    <!-- Sparkle -->
     <img class="sparkle" src="data:image/svg+xml;utf8,<svg fill='gold' height='15' width='15' xmlns='http://www.w3.org/2000/svg'><polygon points='7.5,0 9,6 15,7.5 9,9 7.5,15 6,9 0,7.5 6,6'/></svg>"/>
   </div>
 </div>
-
-<!-- Tree Step -->
 <div class="container hide" id="step-tree">
   <div class="treeanime">
-    <!-- Balloon SVG -->
     <svg class="balloon" width="60" height="120" viewBox="0 0 60 120">
      <ellipse cx="30" cy="34" rx="25" ry="30" fill="#ffeb3b" stroke="#f8bbd0" stroke-width="2"/>
      <ellipse cx="30" cy="66" rx="10" ry="12" fill="#ffeaea"/>
      <line x1="30" y1="64" x2="32" y2="110" stroke="#ba1862" stroke-width="2"/>
     </svg>
-    <!-- SVG Tree Animation -->
     <svg id="tree" width="120" height="180" viewBox="0 0 120 180">
-      <!-- trunk -->
       <rect x="54" y="90" width="12" height="58" fill="#8d6e63">
         <animate attributeName="y" from="180" to="90" dur="1s" fill="freeze"/>
       </rect>
-      <!-- leaves -->
       <ellipse id="leaf1" cx="60" cy="80" rx="40" ry="38" fill="#81c784" opacity="0">
         <animate attributeName="opacity" from="0" to="1" begin="0.8s" dur="0.6s" fill="freeze"/>
       </ellipse>
       <ellipse id="leaf2" cx="60" cy="54" rx="28" ry="26" fill="#43a047" opacity="0">
         <animate attributeName="opacity" from="0" to="1" begin="1.2s" dur="0.6s" fill="freeze"/>
       </ellipse>
-      <!-- flowers (hearts) -->
       <g id="flowers" opacity="0">
         <animate attributeName="opacity" from="0" to="1" begin="1.8s" dur="0.5s" fill="freeze"/>
         <circle cx="85" cy="70" r="7" fill="pink"/>
@@ -286,15 +274,11 @@
   </div>
   <div class="bnote">Let's make a little magic ✨</div>
 </div>
-
-<!-- Music -->
 <audio id="bgmusic" src="https://impoddarak.github.io/Birthday/aud.mp3" loop></audio>
-<!-- Music Play/Pause -->
 <div class="music-control" id="music-ctrl" title="Pause/Play music" style="display:none;">
   <svg id="music-icon-play" style="display:block;" viewBox="0 0 36 36"><circle cx="18" cy="18" r="16" fill="#ffb6d5"/><polygon points="14,10 28,18 14,26" fill="#e91e63"/></svg>
   <svg id="music-icon-pause" style="display:none;" viewBox="0 0 36 36"><circle cx="18" cy="18" r="16" fill="#ffb6d5"/><rect x="12" y="10" width="4" height="16" fill="#e91e63"/><rect x="20" y="10" width="4" height="16" fill="#e91e63"/></svg>
 </div>
-<!-- QnA Step (MCQ Quiz) -->
 <div class="container hide" id="step-qna"></div>
 <!-- Birthday Wish -->
 <div class="container hide" id="step-wish">
@@ -303,13 +287,10 @@
     <span id="typewriter-cursor" style="display:inline-block;width:18px;font-weight:bold;color:#d81b60;">|</span>
   </div>
 </div>
-<!-- Floating Hearts -->
 <div class="hearts hide" id="hearts"></div>
-
-<!-- Confetti animation script -->
 <script>
-const confetti = document.getElementById('confetti'); 
-confetti.width = window.innerWidth; 
+const confetti = document.getElementById('confetti');
+confetti.width = window.innerWidth;
 confetti.height = window.innerHeight;
 window.addEventListener('resize',()=>{confetti.width=window.innerWidth;confetti.height=window.innerHeight;});
 const ctx = confetti.getContext('2d');
@@ -317,7 +298,7 @@ const colors=['#ffb6d5','#ffd6e0','#fffde4','#ffe18d','#bde9ec','#e0c3fc','#f8bb
 function ConfettiPiece(){
   this.x=Math.random()*confetti.width;
   this.y=Math.random()*confetti.height-50;
-  this.r=6+Math.random()*8; 
+  this.r=6+Math.random()*8;
   this.d=Math.random()*90+50;
   this.color=colors[Math.floor(Math.random()*colors.length)];
   this.tilt=Math.floor(Math.random()*7)-3;
@@ -356,14 +337,12 @@ function moveConfetti(){
 }
 drawConfetti();
 </script>
-
 <script>
-/* -- MCQ QUIZ LOGIC -- */
 const MCQ_QUESTIONS = [
   {
     q: "What is my favorite way to wish you happy birthday? 🎂",
     options: ["With a silly meme", "With a web surprise!", "By singing loudly"],
-    correct: 1 // correct answer is "With a web surprise!"
+    correct: 1
   },
   {
     q: "How much do I love you? 💖",
@@ -376,7 +355,6 @@ const MCQ_QUESTIONS = [
     correct: 2
   }
 ];
-
 const stepHeart = document.getElementById('step-heart');
 const stepTree = document.getElementById('step-tree');
 const stepQna = document.getElementById('step-qna');
@@ -388,8 +366,6 @@ const mctrl = document.getElementById('music-ctrl');
 const mIcPlay = document.getElementById('music-icon-play');
 const mIcPause = document.getElementById('music-icon-pause');
 let musicPlaying = false;
-
-// Heart button triggers animation and tree
 document.getElementById('heart-btn').onclick = function() {
   stepHeart.classList.add('hide');
   stepTree.classList.remove('hide');
@@ -407,8 +383,6 @@ document.getElementById('heart-btn').onclick = function() {
     setTimeout(startQna, 1700);
   }, 3200);
 };
-
-// Music Controls
 mctrl.onclick = function() {
   if(musicPlaying){
     bgmusic.pause();
@@ -420,8 +394,6 @@ mctrl.onclick = function() {
     musicPlaying=true;
   }
 }
-
-// Notes popup
 function showNote(msg) {
   let n = document.createElement('div');
   n.textContent = msg;
@@ -429,14 +401,11 @@ function showNote(msg) {
   document.body.appendChild(n);
   setTimeout(()=>n.remove(), 1600);
 }
-
-// -- MCQ Logic --
 let mcqIndex = 0;
 function startQna() {
   stepQna.classList.remove('hide');
   showMCQ(0);
 }
-
 function showMCQ(idx) {
   if (idx >= MCQ_QUESTIONS.length) {
     stepQna.innerHTML =
@@ -448,6 +417,7 @@ function showMCQ(idx) {
       stepQna.classList.add('hide');
       stepWish.classList.remove('hide');
       showHearts();
+      showWish(); // <--- trigger the typewriter wish!
     }, 1300);
     return;
   }
@@ -462,13 +432,11 @@ function showMCQ(idx) {
     </div>
   `;
 }
-
 window.selectMCQ = (idx, selected, btn) => {
   const block = document.getElementById('mcqblock');
   const q = MCQ_QUESTIONS[idx];
   const buttons = block.querySelectorAll('.mcq-btn');
   buttons.forEach(b => b.disabled = true);
-
   if (selected === q.correct) {
     block.classList.add("mcq-correct");
     btn.style.background = "#A8E6CF";
@@ -490,15 +458,13 @@ window.selectMCQ = (idx, selected, btn) => {
     `;
     setTimeout(() => {
       block.classList.remove("mcq-wrong");
-      buttons.forEach(b => b.disabled = false); // Allow retry
+      buttons.forEach(b => b.disabled = false); 
       block.querySelector('.mcq-anim').remove();
       btn.style.background = "";
       btn.style.color = "";
     }, 900);
   }
 };
-
-// Hearts animation (end)
 function showHearts() {
   hearts.innerHTML = "";
   hearts.classList.remove('hide');
@@ -515,6 +481,39 @@ function showHearts() {
   }
   setTimeout(()=>hearts.classList.add('hide'), 3100);
 }
+
+// --- TYPEWRITER WISH FUNCTION ---
+function showWish() {
+  // stepWish.classList.remove('hide'); // already handled
+  // showHearts(); // already handled
+  // Typewriter effect!
+  const msg = "🎉 Happy birthday, my love, Medzzz. May your day be magical! 💖";
+  const el = document.getElementById('typewriter');
+  const cursor = document.getElementById('typewriter-cursor');
+  let i = 0;
+  el.textContent = "";
+  cursor.style.display = "inline-block";
+  function typeNext() {
+    if (i < msg.length) {
+      el.textContent += msg[i];
+      i++;
+      setTimeout(typeNext, 45);
+    } else {
+      cursor.style.display = "none";
+      el.innerHTML += ' <span style="color:#f06292;font-size:1.2em;animation:pop .9s;">✨</span>';
+    }
+  }
+  typeNext();
+}
+// Sparkle pop CSS
+const css = document.createElement("style");
+css.innerHTML = `
+@keyframes pop {
+  0% { transform:scale(0.3) rotate(-10deg);}
+  70%{ transform: scale(1.3);}
+  100% { transform: scale(1) rotate(0deg);}
+}`;
+document.head.appendChild(css);
 </script>
 </body>
 </html>
