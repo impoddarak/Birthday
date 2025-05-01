@@ -513,7 +513,7 @@ function showWish() {
   const cursor = document.getElementById('typewriter-cursor');
   el.innerHTML = "";
   cursor.style.display = "inline-block";
-  let words = msg.split(/(\s+)/); // Split words and spaces
+  let words = msg.split(" ");
   let i = 0;
   function typeNext() {
     if (i < words.length) {
@@ -521,6 +521,8 @@ function showWish() {
       span.className = "type-letter";
       span.textContent = words[i];
       el.appendChild(span);
+      // Add a space unless it's the last word
+      if (i < words.length - 1) el.appendChild(document.createTextNode(" "));
       let delay = (words[i].trim().length > 1) ? 160 : 60;
       if (words[i].includes(",") || words[i].includes(".")) delay += 210;
       i++;
