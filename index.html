@@ -428,7 +428,8 @@ function showNote(msg) {
 let mcqIndex = 0;
 function startQna() {
   stepQna.classList.remove('hide');
-  showMCQ(0);
+  stepQna.innerHTML = `<div style="font-size:1.3em;margin-bottom:22px;color:#d81b60;">Let's do a quick fun quiz! 🎈</div>`;
+  setTimeout(() => showMCQ(0), 1000); // show first question after a brief pause
 }
 function showMCQ(idx) {
   if (idx >= MCQ_QUESTIONS.length) {
