@@ -461,6 +461,7 @@ window.selectMCQ = (idx, selected, btn) => {
   const q = MCQ_QUESTIONS[idx];
   const buttons = block.querySelectorAll('.mcq-btn');
   buttons.forEach(b => b.disabled = true);
+
   if (selected === q.correct) {
     block.classList.add("mcq-correct");
     btn.style.background = "#A8E6CF";
@@ -482,10 +483,14 @@ window.selectMCQ = (idx, selected, btn) => {
     `;
     setTimeout(() => {
       block.classList.remove("mcq-wrong");
-      buttons.forEach(b => b.disabled = false);
-      block.querySelector('.mcq-anim').remove();
-      btn.style.background = "";
-      btn.style.color = "";
+      // The FIX: allow user to retry!
+      block.querySelectorAll('.mcq-btn').forEach(b => {
+        b.disabled = false;
+        b.style.background = "";
+        b.style.color = "";
+      });
+      const anim = block.querySelector('.mcq-anim');
+      if (anim) anim.remove();
     }, 900);
   }
 };
