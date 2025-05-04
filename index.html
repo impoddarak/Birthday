@@ -274,41 +274,46 @@
     <img class="sparkle" src="data:image/svg+xml;utf8,<svg fill='gold' height='15' width='15' xmlns='http://www.w3.org/2000/svg'><polygon points='7.5,0 9,6 15,7.5 9,9 7.5,15 6,9 0,7.5 6,6'/></svg>"/>
   </div>
 </div>
-  <div id="dog-runner" style="display:none;position:fixed;bottom:80px;left:-120px;width:110px;z-index:999;transition:left 0.7s cubic-bezier(.7,1.5,.3,1);">
-  <!-- SVG Dog (edit colors as you like) -->
-  <svg width="100" height="60" viewBox="0 0 100 55">
+<div id="dog-runner" style="display:none;position:fixed;bottom:80px;left:-150px;width:130px;z-index:999;transition:left 0.7s cubic-bezier(.7,1.5,.3,1);">
+  <svg viewBox="0 0 200 150" width="120" height="100">
     <!-- Body -->
-    <ellipse cx="50" cy="40" rx="29" ry="15" fill="#a6764e"/>
+    <ellipse cx="100" cy="100" rx="50" ry="30" fill="#d6a67a"/>
+
     <!-- Head -->
-    <ellipse cx="85" cy="35" rx="10" ry="10" fill="#a6764e"/>
-    <!-- Ear -->
-    <ellipse cx="95" cy="27" rx="6" ry="4" fill="#7a4c11"/>
-    <!-- Tail -->
-    <rect x="13" y="38" width="12" height="5" rx="2.5" fill="#a6764e">
-      <animateTransform attributeName="transform" begin="0s" dur="0.6s" type="rotate"
-        from="0 18 40" to="30 18 40" repeatCount="indefinite" direction="alternate"/>
-    </rect>
-    <!-- Legs (simulated run) -->
-    <rect x="33" y="54" width="5" height="15" rx="2.5" fill="#7a4c11">
-      <animateTransform attributeName="transform" begin="0s" dur="0.5s" type="rotate" from="0 33 54" to="35 33 54" repeatCount="indefinite"/>
-    </rect>
-    <rect x="47" y="54" width="5" height="15" rx="2.5" fill="#7a4c11">
-      <animateTransform attributeName="transform" begin="0.25s" dur="0.5s" type="rotate" from="0 47 54" to="-35 47 54" repeatCount="indefinite"/>
-    </rect>
-    <rect x="65" y="54" width="5" height="15" rx="2.5" fill="#7a4c11">
-      <animateTransform attributeName="transform" begin="0.12s" dur="0.5s" type="rotate" from="0 65 54" to="35 65 54" repeatCount="indefinite"/>
-    </rect>
-    <!-- Eye -->
-    <circle cx="89" cy="34" r="2" fill="#222"/>
+    <circle cx="150" cy="70" r="25" fill="#d6a67a"/>
+
+    <!-- Ears -->
+    <ellipse cx="135" cy="50" rx="8" ry="15" fill="#8b5e3c" />
+    <ellipse cx="165" cy="50" rx="8" ry="15" fill="#8b5e3c" />
+
+    <!-- Eyes -->
+    <circle cx="142" cy="65" r="4" fill="#000"/>
+    <circle cx="158" cy="65" r="4" fill="#000"/>
+
+    <!-- Nose -->
+    <circle cx="150" cy="75" r="3" fill="#000"/>
+
     <!-- Smile -->
-    <path d="M90 40 Q93 41 93 36" stroke="#333" stroke-width="2" fill="none"/>
+    <path d="M142 80 Q150 90 158 80" stroke="#000" stroke-width="2" fill="none"/>
+
+    <!-- Tail -->
+    <rect x="42" y="95" width="20" height="5" rx="2" fill="#d6a67a">
+      <animateTransform attributeName="transform" type="rotate" from="0 50 100" to="30 50 100" dur="0.5s" repeatCount="indefinite" />
+    </rect>
+
+    <!-- Legs -->
+    <rect x="80" y="120" width="8" height="20" rx="3" fill="#8b5e3c" />
+    <rect x="110" y="120" width="8" height="20" rx="3" fill="#8b5e3c" />
   </svg>
+
   <!-- Speech bubble -->
   <div id="dog-say-hello"
-    style="display:none;position:absolute;left:70px;bottom:35px;background:#fff7;border-radius:18px 18px 18px 0;padding:8px 15px;font-size:1.2em;color:#823a14;border:2px solid #ffc1b5;box-shadow:0 2px 9px #ffd4;">
-    Hello! Medzzz 🐶
+    style="display:none;position:absolute;left:90px;bottom:55px;background:#fff7;border-radius:18px 18px 18px 0;padding:8px 15px;font-size:1.2em;color:#823a14;border:2px solid #ffc1b5;box-shadow:0 2px 9px #ffd4;">
+    Hello! Medzzz ❤️❤️ 🐶
   </div>
 </div>
+
+
 <div class="container hide" id="step-tree">
   <div class="treeanime">
     <svg class="balloon" width="60" height="120" viewBox="0 0 60 120">
