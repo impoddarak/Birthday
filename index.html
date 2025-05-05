@@ -216,8 +216,6 @@
     }
     .mcq-correct { }
     .mcq-wrong { animation: shake .5s; }
-
-    /* Typewriter Animations and Mobile Adjustments */
     @keyframes popLetter {
       0%   { opacity: 0; transform: scale(1.6);}
       100% { opacity:1; transform:scale(1);}
@@ -247,10 +245,10 @@
       }
     }
     @media (max-width: 600px) {
-  #dog-runner { bottom: 26px; width: 65px; }
-  #dog-runner svg { width: 60px; height:36px; }
-  #dog-say-hello { font-size: .95em; left:43px; bottom:28px;}
-}
+      #dog-runner { bottom: 26px; width: 65px; }
+      #dog-runner svg { width: 60px; height:36px; }
+      #dog-say-hello { font-size: .95em; left:43px; bottom:28px;}
+    }
   </style>
 </head>
 <body>
@@ -274,46 +272,36 @@
     <img class="sparkle" src="data:image/svg+xml;utf8,<svg fill='gold' height='15' width='15' xmlns='http://www.w3.org/2000/svg'><polygon points='7.5,0 9,6 15,7.5 9,9 7.5,15 6,9 0,7.5 6,6'/></svg>"/>
   </div>
 </div>
-<div id="dog-runner" style="display:none;position:fixed;bottom:80px;left:-150px;width:130px;z-index:999;transition:left 0.7s cubic-bezier(.7,1.5,.3,1);">
+<div id="dog-runner" style="display:none;position:fixed;bottom:80px;left:-150px;width:130px;z-index:999;transition:left 1.5s cubic-bezier(.7,1.5,.3,1);">
   <svg viewBox="0 0 200 150" width="120" height="100">
     <!-- Body -->
     <ellipse cx="100" cy="100" rx="50" ry="30" fill="#d6a67a"/>
-
     <!-- Head -->
     <circle cx="150" cy="70" r="25" fill="#d6a67a"/>
-
     <!-- Ears -->
     <ellipse cx="135" cy="50" rx="8" ry="15" fill="#8b5e3c" />
     <ellipse cx="165" cy="50" rx="8" ry="15" fill="#8b5e3c" />
-
     <!-- Eyes -->
     <circle cx="142" cy="65" r="4" fill="#000"/>
     <circle cx="158" cy="65" r="4" fill="#000"/>
-
     <!-- Nose -->
     <circle cx="150" cy="75" r="3" fill="#000"/>
-
     <!-- Smile -->
     <path d="M142 80 Q150 90 158 80" stroke="#000" stroke-width="2" fill="none"/>
-
     <!-- Tail -->
     <rect x="42" y="95" width="20" height="5" rx="2" fill="#d6a67a">
       <animateTransform attributeName="transform" type="rotate" from="0 50 100" to="30 50 100" dur="0.5s" repeatCount="indefinite" />
     </rect>
-
     <!-- Legs -->
     <rect x="80" y="120" width="8" height="20" rx="3" fill="#8b5e3c" />
     <rect x="110" y="120" width="8" height="20" rx="3" fill="#8b5e3c" />
   </svg>
-
   <!-- Speech bubble -->
   <div id="dog-say-hello"
     style="display:none;position:absolute;left:90px;bottom:55px;background:#fff7;border-radius:18px 18px 18px 0;padding:8px 15px;font-size:1.2em;color:#823a14;border:2px solid #ffc1b5;box-shadow:0 2px 9px #ffd4;">
     Hello! Medzzz ❤️❤️ 🐶
   </div>
 </div>
-
-
 <div class="container hide" id="step-tree">
   <div class="treeanime">
     <svg class="balloon" width="60" height="120" viewBox="0 0 60 120">
@@ -435,6 +423,36 @@ const mctrl = document.getElementById('music-ctrl');
 const mIcPlay = document.getElementById('music-icon-play');
 const mIcPause = document.getElementById('music-icon-pause');
 let musicPlaying = false;
+
+// ---- DOG RUN ANIMATION FUNCTION ----
+function runDogAnimation(whenDone) {
+  const dog = document.getElementById("dog-runner");
+  const hello = document.getElementById("dog-say-hello");
+  dog.style.display = "block";
+  dog.style.left = "-150px"; // Off-screen left
+  hello.style.display = "none";
+  // Where to stop (center or a bit left)
+  let stopX = Math.min(window.innerWidth/2 - 65, window.innerWidth - 210);
+  dog.style.transition = "left 1.6s cubic-bezier(.7,1.5,.3,1)";
+  setTimeout(()=>{dog.style.left=stopX+"px";}, 70);
+  setTimeout(()=>{
+    hello.style.display = "block";
+    setTimeout(()=>{
+      hello.style.display = "none";
+      dog.style.left = window.innerWidth+140+"px";
+      dog.style.transition = "left 1.3s cubic-bezier(.7,1.5,.6,1)";
+      setTimeout(()=>{
+        dog.style.display="none";
+        if (whenDone) whenDone();
+      }, 1200);
+    }, 1200);
+  }, 1750);
+}
+
+// ---- YOUR TREE ANIMATION FUNCTION (SVG or canvas) ----
+// If you want the old SVG-based tree to remain, this is fine.
+// If you want to use the animated canvas "sprouting heart tree" from your old project, let me know!
+
 document.getElementById('heart-btn').onclick = function() {
   stepHeart.classList.add('hide');
   runDogAnimation(function() {
@@ -450,15 +468,15 @@ document.getElementById('heart-btn').onclick = function() {
       mIcPause.style.display='block';
     }, 700);
 
-    // Start your tree animation (if using canvas/code from previous answers)
-    startTreeAnimation(function(){
-      // Tree animation finished, continue to MCQ step
+    // Wait for tree SVG animation to finish, then move to MCQ
+    setTimeout(() => {
       stepTree.classList.add('hide');
       showNote("Before your wish... a few fun questions! 💬");
       setTimeout(startQna, 1700);
-    });
+    }, 3200);
   });
 };
+
 mctrl.onclick = function() {
   if(musicPlaying){
     bgmusic.pause();
@@ -481,7 +499,7 @@ let mcqIndex = 0;
 function startQna() {
   stepQna.classList.remove('hide');
   stepQna.innerHTML = `<div style="font-size:1.3em;margin-bottom:22px;color:#d81b60;">Let's do a quick fun quiz! 🎈</div>`;
-  setTimeout(() => showMCQ(0), 1000); // show first question after a brief pause
+  setTimeout(() => showMCQ(0), 1000);
 }
 function showMCQ(idx) {
   if (idx >= MCQ_QUESTIONS.length) {
@@ -514,7 +532,6 @@ window.selectMCQ = (idx, selected, btn) => {
   const q = MCQ_QUESTIONS[idx];
   const buttons = block.querySelectorAll('.mcq-btn');
   buttons.forEach(b => b.disabled = true);
-
   if (selected === q.correct) {
     block.classList.add("mcq-correct");
     btn.style.background = "#A8E6CF";
@@ -536,7 +553,6 @@ window.selectMCQ = (idx, selected, btn) => {
     `;
     setTimeout(() => {
       block.classList.remove("mcq-wrong");
-      // The FIX: allow user to retry!
       block.querySelectorAll('.mcq-btn').forEach(b => {
         b.disabled = false;
         b.style.background = "";
@@ -563,7 +579,6 @@ function showHearts() {
   }
   setTimeout(()=>hearts.classList.add('hide'), 3100);
 }
-
 // --- IMPROVED TYPEWRITER, TYPING BY WORD ---
 function showWish() {
   const msg = "🎉 Happy birthday, my love, Medzzz. May your day be magical! 💖";
@@ -597,35 +612,6 @@ function showWish() {
   }
   typeNext();
 }
-  function runDogAnimation(whenDone) {
-  const dog = document.getElementById("dog-runner");
-  const hello = document.getElementById("dog-say-hello");
-  dog.style.display = "block";
-  dog.style.left = "-110px"; // Off-screen left
-  hello.style.display = "none";
-  // Calculate where to stop (center-ish or your target)
-  let stopX = Math.min(window.innerWidth/2 - 55, window.innerWidth - 180);
-  // Step 1: Dog runs in
-  setTimeout(()=>{dog.style.left=stopX+"px";}, 50);
-  // Step 2: Stop and say Hello
-  setTimeout(()=>{
-    hello.style.display = "block";
-    // Step 3: Wait, then dog says bye & runs off right
-    setTimeout(()=>{
-      hello.style.display = "none";
-      dog.style.left = window.innerWidth+110+"px";
-      // Step 4: When offscreen, hide dog and trigger callback
-      setTimeout(()=>{
-        dog.style.display="none";
-        if (whenDone) whenDone();
-      }, 1000); // adjust if needed
-    }, 950); // Show "Hello!" for ~1 second
-  }, 1300); // How long to reach center
-}
-
-// Example usage:
-// runDogAnimation(function(){ startTreeAnimation(...); });
-// Call this when you want to begin the dog animation step!
 </script>
 </body>
 </html>
